@@ -1,25 +1,32 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 import tweepy
 
-
 from settings import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET
-#Get your Twitter API credentials and enter them here
-consumer_key = CONSUMER_KEY
-consumer_secret = CONSUMER_SECRET
-access_key = ACCESS_TOKEN_KEY
-access_secret = ACCESS_TOKEN_SECRET
 
-def get_tweets():
-    print(consumer_key, consumer_secret)
-    print(type(consumer_key))
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('download')
 
+
+def download_tweets():
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+
+    logger.debug('start auth...')
     api = tweepy.API(auth)
 
+    logger.debug('start download...')
     public_tweets = api.home_timeline()
-    print(public_tweets)
+
+    logger.debug('saving tweets...')
+    import ipdb
+    ipdb.set_trace()
+    with open('tweets.json', 'w+') as sample_file:
+        sample_file.write(public_tweets)
+    logger.info('DONE!')
 
 
-get_tweets()
+if __name__ == '__main__':
+    download_tweets()
